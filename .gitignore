@@ -1,3 +1,6 @@
 transcriber
-dataset_create/jpgs_beta
-dataset_create/videos_beta
+dataset_create/videos_jpgs/jpgs_beta/*
+dataset_create/videos_jpgs/videos_beta/*
+dataset_create/add-text/no_txt/*
+dataset_create/add-text/w_txt/*
+dataset_create/add-text/no_txt_tiny/*
