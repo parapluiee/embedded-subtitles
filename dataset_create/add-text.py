@@ -6,29 +6,26 @@ import random
 import string
 import utils
 import pickle
-working_dir = 'add-text/'
-notxt_dir = 'no_text_tiny'
-wtxt_dir = 'w_text'
+working_dir = 'data/'
 width = 640
 height = 360
 box_buffer = 5
-data_dict = dict()
-def add_text(image, position, text, color, output_dir, font, text_num, id_num, box_coords, img_show=False):
+def add_text(image, file_name, position, text, color, output_dir, font, box_coords, box_show=False, img_show=False):
     img = Image.open(image)
     draw = ImageDraw.Draw(img)
-    draw.text(position, text, color, anchor='md', font=font)
-    draw.rectangle(box_coords)
+    draw.text(position, text, color, anchor='md', font=font, align='center')
+    if (box_show==True):
+        draw.rectangle(box_coords)
     if (img_show):
         img.show()
-    file_name = image.stem + '_' + str(text_num) + '_' + str(id_num) + image.suffix
     img.save(output_dir + '/' + file_name)
-    data_dict[file_name] = box_coords
+    img.close()
     
 
 #generative functionss
 def rand_position(wid, hei):
     #prob need to tune this to be realistic, i.e not 0 or 720
-    y = random.randint(0, hei)
+    y = random.randint(50, hei-50)
     return (wid/2, y)
 
 def rand_text(pixels):
@@ -76,36 +73,50 @@ def det_coords(text, font, position):
             longest_line = line
     metrics = font.getmetrics()
     length = font.getlength(longest_line) 
-    box = [position[0] - int(length/2) - box_buffer, position[1] - (metrics[0] + metrics[1]) * lines - box_buffer, position[0] + int(length/2) + box_buffer, position[1] + box_buffer]
+    box = [int(position[0] - int(length/2) - box_buffer), int(position[1] - (metrics[0] + metrics[1]) * lines - box_buffer), int((position[0] + length/2) + box_buffer), int(position[1] + box_buffer)]
     return box
 
-def run_in_dir(input_dir, output_dir):
+def run_in_dir(input_dir, output_dir, max_imgs=0):
+    data_dict = dict()
     utils.clear_directory(output_dir)
     input_path = Path(input_dir)
     print("Start iteration\n")
-    id_num = 1
-    for j in range(10):
-        pos = rand_position(width, height)
-        font_size = rand_f_size()
-        font = rand_font(font_size)
-        text = rand_text(font_size)
-        box_coords = det_coords(text, font, pos)
-        color = rand_color("white")
-        t = False
-        i = 0
-        for image in input_path.iterdir():
-            if i % 1000 == 0:
-                print(i)
-            add_text(image, pos, text, color, output_dir, font, j, i, box_coords, t)
-            i+=1
+    id_num = 0
+    for image in input_path.iterdir():
+        if id_num % 1000 == 0:
+            print("Text insertion imgage: " + str(id_num))
+        if max_imgs != 0 and id_num == max_imgs:
+            return data_dict
+        for j in range(5):
+            pos = rand_position(width, height)
+            font_size = rand_f_size()
+            font = rand_font(font_size)
+            text = rand_text(font_size)
+            box_coords = det_coords(text, font, pos)
+            color = rand_color("white")
+            t = False
+            file_name = image.stem + '_' + str(j) + '_' + str(id_num) + image.suffix
+            add_text(image, file_name, pos, text, color, output_dir, font, box_coords, t)
+            data_dict[file_name] = box_coords
+        id_num+=1
+    return data_dict
 
-def dict_pickle():
-    dict_file = open(working_dir + 'img_data.pkl', 'wb')
+def dict_pickle(data_dict, name):
+    dict_file = open(working_dir + name + '.obj', 'wb')
     pickle.dump(data_dict, dict_file)
     dict_file.close
+
 def main():
-    run_in_dir(working_dir + notxt_dir, working_dir + wtxt_dir)
-    dict_pickle()
+    notxt_dir = 'jpgs'
+    train_dir = 'w_text_train'
+    valid_dir = 'w_text_valid'
+
+    data_dict = dict()
+    train_dict = run_in_dir(working_dir + notxt_dir, working_dir + train_dir, 2000)
+    valid_dict = run_in_dir(working_dir + notxt_dir, working_dir + valid_dir, 500)
+     
+    dict_pickle(train_dict, 'train_data')
+    dict_pickle(valid_dict, 'valid_data')
 
 def get_metrics(font_size):
     font = font=ImageFont.truetype("arial.ttf", font_size)

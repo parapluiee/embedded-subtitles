@@ -5,9 +5,9 @@ import os, shutil
 import utils
 FRAMES_PER_IMAGE = 10
 
-working_dir = 'videos_jpgs/'
-video_dir = 'videos_beta'
-jpg_dir = 'jpgs_beta'
+working_dir = 'data/'
+video_dir = 'videos'
+jpg_dir = 'jpgs'
 # Opens the Video file
 def video_to_jpg(vid_dir, jpg_dir, video):
     print("Video: " + video)
