@@ -1,6 +1,7 @@
 import torch
 from torchvision import transforms
 from torchvision.models.resnet import ResNet18_Weights
+import torchvision
 from torch import nn
 from loaddataset import data_dict
 from dataset_obj import CustomImageDataset
@@ -71,11 +72,11 @@ def train(model, train_loader, val_loader, criterion, optimizer, num_epochs):
 
                 # Update the running loss and accuracy
                 running_loss += loss.item() * inputs.size(0)
-                #running_corrects += torch.sum(preds == labels.data)
+                running_corrects += torch.sum(preds == labels.data)
 
         # Calculate the validation loss and accuracy
         val_loss = running_loss / len(val_dataset)
-        #val_acc = running_corrects.double() / len(val_dataset)
+        val_acc = running_corrects.double() / len(val_dataset)
         val_acc = 0
         # Print the epoch results
         print('Epoch [{}/{}], train loss: {:.4f}, train acc: {:.4f}, val loss: {:.4f}, val acc: {:.4f}'
@@ -83,7 +84,8 @@ def train(model, train_loader, val_loader, criterion, optimizer, num_epochs):
 
 def main():
     print('Loading Model')
-    model = torch.hub.load('pytorch/vision:v0.10.0', 'resnet18', weights=ResNet18_Weights.DEFAULT)
+    #model = torch.hub.load('pytorch/vision:v0.10.0', 'resnet18', weights=ResNet18_Weights.DEFAULT)
+    model = torchvision.models.resnet18()
     for param in model.parameters():
         param.requires_grad = False
     #currently replaces final layer
@@ -100,8 +102,8 @@ def main():
     ds_train = CustomImageDataset(df_train, 'data/w_text_train', transform = transforms.ToTensor())
     ds_valid = CustomImageDataset(df_valid, 'data/w_text_valid', transform = transforms.ToTensor())
 
-    dl_train = DataLoader(ds_train, batch_size=64, shuffle=True)
-    dl_valid = DataLoader(ds_valid, batch_size=64, shuffle=True)
+    dl_train = DataLoader(ds_train, batch_size=32, shuffle=True)
+    dl_valid = DataLoader(ds_valid, batch_size=32, shuffle=True)
     print ('Data Loaded')
 
     optimizer = torch.optim.SGD(model.fc.parameters(), lr=0.01, momentum=.9)
