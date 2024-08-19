@@ -78,11 +78,13 @@ def train(model, train_loader, val_loader, criterion, optimizer, num_epochs):
 
                 # Update the running loss and accuracy
                 running_loss += loss.item() * inputs.size(0)
-                #running_corrects += torch.sum(preds == labels.data)
+                running_corrects += torch.sum(preds == labels.data)
 
         # Calculate the validation loss and accuracy
+
         val_loss = running_loss / len(val_loader)
         #val_acc = running_corrects.double() / len(val_dataset)
+
         val_acc = 0
         """
         # Print the epoch results
@@ -109,8 +111,8 @@ def main():
     ds_train = CustomImageDataset(df_train, 'data/w_text_train', transform = transforms.ToTensor())
     ds_valid = CustomImageDataset(df_valid, 'data/w_text_valid', transform = transforms.ToTensor())
 
-    dl_train = DataLoader(ds_train, batch_size=64, shuffle=True)
-    dl_valid = DataLoader(ds_valid, batch_size=64, shuffle=True)
+    dl_train = DataLoader(ds_train, batch_size=32, shuffle=True)
+    dl_valid = DataLoader(ds_valid, batch_size=32, shuffle=True)
     print ('Data Loaded')
 
     optimizer = torch.optim.SGD(model.fc.parameters(), lr=0.01, momentum=.9)
