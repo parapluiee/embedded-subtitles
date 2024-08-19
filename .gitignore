@@ -1,4 +1,5 @@
 transcriber
+dataset_create/data/*.obj
 dataset_create/videos_jpgs/jpgs_beta/*
 dataset_create/videos_jpgs/videos_beta/*
 dataset_create/add-text/no_txt/*
