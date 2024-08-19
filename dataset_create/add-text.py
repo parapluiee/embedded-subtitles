@@ -18,6 +18,7 @@ def add_text(image, file_name, position, text, color, output_dir, font, box_coor
         draw.rectangle(box_coords)
     if (img_show):
         img.show()
+    img = utils.edge_detect(img)
     img.save(output_dir + '/' + file_name)
     img.close()
     
