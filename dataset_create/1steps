@@ -1,0 +1,13 @@
+youtube-dl -f "best[height=360]" --id PLPRMrnUWg3TGJ1NCmCcXzmJCebJRWawpW
+s3G2kLruJJo
+1st goal: 100 each, subititled and not
+saved at unlisted playlist
+none : PLZ-j187Eteu_7x9HWvhzH1vuSH6J-8ys4
+with : PLZ-j187Eteu8tDPDztGSHVjqzXq2J_ui6
+youtube-dl -f "best[height=360]" --id s3G2kLruJJo
+
+
+
+download videos into data/videos
+mp4-jpg.py
+add-text.py
