@@ -13,7 +13,6 @@ def video_to_jpg(vid_dir, jpg_dir, video):
     print("Video: " + video)
     cap = cv2.VideoCapture(vid_dir + '/' + video)
     filename = strip_mp4(video)
-    os.mkdir(jpg_dir + '/' + filename)
     i=0
     while(cap.isOpened()):
        
@@ -23,7 +22,7 @@ def video_to_jpg(vid_dir, jpg_dir, video):
         if (i % FRAMES_PER_IMAGE != 0):
             i+=1
             continue
-        cv2.imwrite(jpg_dir + '/' + filename + '/' + filename + "_" + str(i)+'.jpg',frame)
+        cv2.imwrite(jpg_dir + '/' + filename + "_" + str(i)+'.jpg',frame)
         i+=1
      
     cap.release()
