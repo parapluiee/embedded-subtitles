@@ -94,10 +94,14 @@ def train(model, train_loader, val_loader, criterion, optimizer, num_epochs):
 
 
 def main():
+    bw = True
     print('Loading Model')
     #model = torch.hub.load('pytorch/vision:v0.10.0', 'resnet18', weights=ResNet18_Weights.DEFAULT)
     model = torchvision.models.resnet18()
     #currently replaces final layer
+    if (bw):
+         model.conv1 = nn.Conv2d(1, 64, kernel_size=7, stride=2, padding=3,
+                               bias=False)          
     model.fc = nn.Sequential(nn.Linear(model.fc.in_features, 4))
     print('Model Loaded')
 
