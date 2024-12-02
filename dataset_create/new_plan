@@ -1,0 +1,9 @@
+download video in entirety
+A: get first 32 segments of video based on t time slices (10 frames?)
+    training/testing: add text, save coords (gold data)
+edge detection + b&w
+compress
+predict rectangle
+    training: back prop
+    real prediction: save predicted rectangle and time of 32 (i.e frame 3000)
+
