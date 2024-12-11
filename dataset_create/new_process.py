@@ -10,6 +10,7 @@ from torch.utils.data import Dataset
 import numpy as np
 import torch
 from object_local import main
+from object_local import flood_fill_square
 def pillow_edge(imgs):
     out = []
     for img in imgs:
@@ -66,7 +67,7 @@ def rand_font(font_size):
     return ImageFont.truetype("arial.ttf", font_size)
 
 #x1, y1, x2, y2
-def det_coords(text, font, position, box_buffer=10):
+def det_coords(text, font, position, box_buffer=0):
     split = text.split('\n')
     l = 0
     longest_line = ''
@@ -132,9 +133,10 @@ def reduce_imgs(imgs, red_height=128):
         out.append(img.convert('1'))
     return out
 
-def edge_det_compr(imgs):
+def edge_det_compr(imgs, reduce=True):
     edged = pillow_edge(imgs)
-    edged = reduce_imgs(edged)
+    if (reduce):
+        edged = reduce_imgs(edged)
     return edged
 
 
@@ -147,12 +149,11 @@ def create_image_data(cap, batch_size=True, train=False, mask=False):
             old_size = images[0].size
         else:
             clean_images = images
-        images = edge_det_compr(images)
+        images = edge_det_compr(images, reduce=False)
         new_size = images[0].size
         if (mask):
             ratio = new_size[1] / old_size[1]
             coords = coords_to_mask(coords, ratio, new_size)
-        
         if (train == True):
             images = zip(images, coords)
         else:
@@ -170,52 +171,24 @@ def run_on_dev(model, video_path):
         masks = model(images_tensor)
 
         masks = (masks.detach().numpy() > .5)
-        clean_shape = clean_images[0].size
-        clean_width = clean_shape[0]
-        clean_height = clean_shape[1]
         #print("clean_width: ", clean_width)
-        shape = masks[0].shape
-        width = shape[1]
-        height = shape[2]
-        ratio = height / clean_width
         #print("mask_width: ", height)
         for i in range(len(images)):
-            path = "batch_" + str(batch) + "_" + str(i) + ".jpg"
-            clean_images[i].save("data/predict/clean_images/" + path)
-            left = width
-            top = height
-            right = 0
-            bottom = 0
-            for j in range(width):
-                for k in range(height):
-                    if (masks[i][0][j][k]):
-                        if j < left:
-                            left = j
-                        if j > right:
-                            right = j
-                        if k < top:
-                            top = k
-                        if k > bottom:
-                            bottom = k
-            if (left > right or top > bottom):
-                continue
-            cropped = clean_images[i].crop((max(0, int(left * ratio)), max(0, int(top * ratio)), min(clean_width, int(right * ratio)), min(clean_height, int(bottom * ratio))))
-            #cropped.show()
-            """
-            cropped = np.zeros((width, height))
-            for j in range(left, right):
-                for k in range(top, bottom):
-                    cropped[j][k] = np.array(images)[i][j][k]
-                    #cropped[j][k] = 1
-            
-            cropped = Image.fromarray((cropped * 255).astype(np.uint8))
-            """
-            #cropped.show()
-            if (cropped.size[0] != 0 and cropped.size[1] != 0):
-                cropped.save("data/predict/cropped/" + path)
+            path = "batch_" + str(batch) + "_" + str(i).zfill(4) + ".jpg"
+            clean_images[i].save("data/predict/clean_images/" + path) 
+
+
+            masks[i][0] = flood_fill_square(masks[i][0], buffer = 10)
+            swapped_mask = np.swapaxes(np.swapaxes(np.array(masks[i]),0,2), 0, 1).squeeze()
+            #swapped_mask = np.swapaxes(np.swapaxes(np.array(masks[i]),0,2), 0, 1)
+            Image.fromarray(edge_det_compr([clean_images[i]], reduce=False)[0] * swapped_mask).save("data/predict/cropped/" + path)
         return False
         batch+=1
-        #do stuff
+        
+
+
+
+
 def coords_to_mask(coords, ratio, shape):
     mask = np.zeros((len(coords), shape[1], shape[0]))
     imgs, hei, wid = mask.shape
@@ -257,11 +230,21 @@ def training_data_dir(dir_path):
 
 #train model
 #training_data_dir("data/videos/")
-model = main()
-torch.save(model, "model.pt")
+#model = main()
+#torch.save(model, "model.pt")
 
 #predict
 #model = torch.load("model.pt")
-#vid_path = "data/predict/lalcool.mp4"
+#vid_path = "data/predict/embedded.mp4"
 #run_on_dev(model, vid_path)
 
+
+def train_on(training_data):
+    training_data_dir(training_data)
+    model = main()
+    torch.save(model, "model.pt")
+
+def pred(video_path):
+    model = torch.load("model.pt")
+    vid_path = "data/predict/embedded.mp4"
+    run_on_dev(model, vid_path)
