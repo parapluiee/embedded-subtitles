@@ -1,1 +1,1 @@
-![alt text](https://github.com/parapluiee/embedded-subtitles/tree/main/example_imgs/edge_det.jpg?raw=true)
+![alt text](example_imgs/edge_det.jpg?raw=true)
