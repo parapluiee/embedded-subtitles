@@ -31,6 +31,7 @@ The CNN is trained on this data (different images here, label mask on right)\
 <img src="example_imgs/label0.jpg" width="180">
 <img src="example_imgs/raw_mask10.jpg" width="180">
 <img src="example_imgs/label10.jpg" width="180">
+
 <img src="example_imgs/raw_mask20.jpg" width="180">
 <img src="example_imgs/label20.jpg" width="180">
 <img src="example_imgs/raw_mask30.jpg" width="180">
