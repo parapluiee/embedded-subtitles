@@ -19,7 +19,7 @@ This image is the training data, and a mask is created indicating the location o
 <img src="example_imgs/label_mask.jpg" width="180">)\
 The CNN is trained on this data (different images here, label mask on right)\
 <img src="example_imgs/raw_mask0.jpg" width="180">) 
-<img src="https://parapluiee/embedded-subtitles//example_imgs/label0.jpg" width="180">)
+<img src="example_imgs/label0.jpg" width="180">)
 
 <img src="example_imgs/raw_mask10.jpg" width="180">)
 <img src="example_imgs/label10.jpg" width="180">)
