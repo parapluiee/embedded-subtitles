@@ -1,5 +1,5 @@
 ## EMBEDDED SUBTITLES TOOL
-*A tool for isolating and extracting subtitles which are embedded directly onto videos.*\
+*A tool for isolating and extracting subtitles which are embedded directly onto videos.*
 
 *Examples*: \
 *[Loris Giuliano](https://www.youtube.com/@loris.giuliano)*, a (very popular) French Youtuber\
@@ -31,11 +31,8 @@ The CNN is trained on this data (different images here, label mask on right)\
 <img src="example_imgs/label0.jpg" width="180">
 <img src="example_imgs/raw_mask10.jpg" width="180">
 <img src="example_imgs/label10.jpg" width="180">
-
 <img src="example_imgs/raw_mask20.jpg" width="180">
 <img src="example_imgs/label20.jpg" width="180">
-
-
 <img src="example_imgs/raw_mask30.jpg" width="180">
 <img src="example_imgs/label30.jpg" width="180">
 
@@ -54,7 +51,8 @@ Image -> Edge-detection -> CNN -> Mask Manipulation -> Mask Applied
 <img src="example_imgs/cropped.jpg" width="300">
 
 **Future work:**\
-These extractions function suprisingly poorly with Google Tesseract OCR, even with color inversion and smoothing (-Qu'estce qu'umfanism P) 
+These extractions function suprisingly poorly with Google Tesseract OCR, even with color inversion and smoothing\
+Output: *-Qu'estce qu'umfanism P*
 
 *Possible Fixes:*
 - Different OCR
