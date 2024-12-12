@@ -1,9 +1,16 @@
 ## EMBEDDED SUBTITLES TOOL
 *A tool for isolating and extracting subtitles which are embedded directly onto videos.*
 
+**Motivation** : In online spaces, and in archived films, it is a somehwat common practice to embed subtitles directly onto video, which disallows both translation and subtitle retrieval. This practice is extremely common on short-form video content in multiple languages.\
+This data is often 
+1. Meticulously transcribed
+2. Audio timed
+3. In the language of the video (in the case of online spaces)
+4. Colloquial and Slang-filled
+
 *Examples*: \
 *[Loris Giuliano](https://www.youtube.com/@loris.giuliano)*, a (very popular) French Youtuber\
-Archived films in translation, such as this version of *[The Color of Pomegranates](https://archive.org/details/ColorOfPomegranates-SayatNova1968)*
+This version of  *[The Color of Pomegranates](https://archive.org/details/ColorOfPomegranates-SayatNova1968)* (the only freely availible subtitled version)
 ### *Usage*
 
 TODO
@@ -16,7 +23,7 @@ TODO
 
 **Training**
 
-Given a directory of training videos.\
+Given a directory of training videos:\
 The frames from this video are extracted, possibly by skipping frames.\
 <img src="example_imgs/clean_train.jpg" width="300">\
 Text is added to these frames, with varying lengths, fonts, positions, and sizes.\
@@ -60,5 +67,5 @@ Output: << *-Qu'estce qu'umfanism P* >>
     - More intense masking, currently rectanglar
 
 2) Accuracy Metrics\
-    For my first approaches to this problem, I used a standard regression neural network, where the output was a vector of four values indicating the top-left corner and bottom right corner (x1, y1, x2, y2) of the mask rectangle. \
+    For my first approaches to this problem, I used a regression neural network, where the output was a vector of four pixel values indicating the top-left corner and bottom right corner (x1, y1, x2, y2) of the mask rectangle. \
     This approached used an IoU loss function, and for determining the efficacy of this model a IoU adjecent accuracy metric would be very apt, but I have not measured the models accuracy as of yet.
