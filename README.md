@@ -50,13 +50,15 @@ Image -> Edge-detection -> CNN -> Mask Manipulation -> Mask Applied
 <img src="example_imgs/clean_batch.jpg" width="300">
 <img src="example_imgs/cropped.jpg" width="300">
 
-**Future work:**\
-These extractions function suprisingly poorly with Google Tesseract OCR, even with color inversion and smoothing\
-Output: *-Qu'estce qu'umfanism P*
+**Future work:**
+1) These extractions function suprisingly poorly with Google Tesseract OCR, even with color inversion and smoothing\
+Output: << *-Qu'estce qu'umfanism P* >>
 
-*Possible Fixes:*
-- Different OCR
-- Statistical Matching (breaks use-case of colloquial speech)
-- More intense masking, currently rectanglar
+    *Possible Fixes:*
+    - Different OCR
+    - Statistical Matching (breaks use-case of colloquial speech)
+    - More intense masking, currently rectanglar
 
-
+2) Accuracy Metrics\
+    For my first approaches to this problem, I used a standard regression neural network, where the output was a vector of four values indicating the top-left corner and bottom right corner (x1, y1, x2, y2) of the mask rectangle. \
+    This approached used an IoU loss function, and for determining the efficacy of this model a IoU adjecent accuracy metric would be very apt, but I have not measured the models accuracy as of yet.
